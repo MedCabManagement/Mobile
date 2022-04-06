@@ -28,8 +28,8 @@ class User {
     final data = jsonDecode(response.body);
 
     if (response.statusCode == HttpStatus.ok) {
-      name = data['name'];
       email = data['email'];
+      name = data['name'];
     } else {
       Fluttertoast.showToast(
         msg: data['error'] ?? 'Failed to login',
