@@ -22,8 +22,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: const Text("MDC Management Application",
-            style: TextStyle(fontSize: 16, color: Colors.white60)),
+            style: TextStyle(
+                fontSize: 17,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
@@ -74,6 +78,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: ElevatedButton(
                   child: const Text('Login'),
+                  style: ElevatedButton.styleFrom(primary: Colors.green),
                   onPressed: inputFieldEnabled
                       ? () {
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -85,7 +90,6 @@ class _LoginState extends State<Login> {
                           Future((() async {
                             final email = emailController.text;
                             final password = passwordController.text;
-
                             final statusCode =
                                 await user.login(email, password);
                             if (statusCode == 200) {
