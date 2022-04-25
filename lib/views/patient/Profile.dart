@@ -5,14 +5,10 @@ import 'package:patient/models/patient.dart';
 import 'package:patient/views/home.dart';
 
 class Profile extends StatefulWidget {
-  final String fullname, age, illness, gender, id;
+  final String name, id;
+  final int age;
   const Profile(
-      {required this.id,
-      required this.fullname,
-      required this.age,
-      required this.illness,
-      required this.gender,
-      Key? key})
+      {required this.id, required this.name, required this.age, Key? key})
       : super(key: key);
 
   @override
@@ -56,7 +52,7 @@ class _ProfileState extends State<Profile> {
               child: ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 leading:
-                    Text(widget.fullname, style: const TextStyle(fontSize: 17)),
+                    Text(widget.name, style: const TextStyle(fontSize: 17)),
               )),
           const SizedBox(height: 5),
           const Text("Age",
@@ -69,42 +65,13 @@ class _ProfileState extends State<Profile> {
               color: Colors.white60,
               child: ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                leading: Text(widget.age, style: const TextStyle(fontSize: 17)),
+                leading: Text(widget.age.toString(),
+                    style: const TextStyle(fontSize: 17)),
               )),
           const SizedBox(height: 5),
-          const Text("Illness",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans")),
-          Card(
-              color: Colors.white60,
-              child: ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                leading:
-                    Text(widget.illness, style: const TextStyle(fontSize: 17)),
-              )),
-          const SizedBox(height: 5),
-          const Text("Gender",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans")),
-          Card(
-              color: Colors.white60,
-              child: ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                leading:
-                    Text(widget.gender, style: const TextStyle(fontSize: 17)),
-              )),
-          const SizedBox(height: 20),
           TextButton.icon(
               onPressed: () async {
                 final res = await patient.delete(widget.id);
-
-                print(res);
 
                 if (res == 200) {
                   Navigator.pop(context, true);

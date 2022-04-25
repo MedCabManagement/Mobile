@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:patient/models/account.dart';
+import 'package:patient/models/user.dart';
 import 'package:patient/views/home.dart';
 
 class Login extends StatefulWidget {
@@ -92,6 +92,7 @@ class _LoginState extends State<Login> {
                             final password = passwordController.text;
                             final statusCode =
                                 await user.login(email, password);
+
                             if (statusCode == 200) {
                               Navigator.of(context).popUntil(
                                   (route) => Navigator.of(context).canPop());

@@ -9,9 +9,8 @@ class CreatePatient extends StatefulWidget {
 }
 
 class _CreatePatientState extends State<CreatePatient> {
-  final fullnameController = TextEditingController();
+  final nameController = TextEditingController();
   final ageController = TextEditingController();
-  final illnessController = TextEditingController();
 
   final patient = Patient();
 
@@ -40,10 +39,10 @@ class _CreatePatientState extends State<CreatePatient> {
         padding: const EdgeInsets.fromLTRB(10, 60, 10, 20),
         children: [
           TextField(
-            controller: fullnameController,
+            controller: nameController,
             keyboardType: TextInputType.name,
             decoration: const InputDecoration(
-              labelText: "Fullname",
+              labelText: "name",
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
             ),
@@ -54,16 +53,6 @@ class _CreatePatientState extends State<CreatePatient> {
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: "Age",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            ),
-          ),
-          const SizedBox(height: 15),
-          TextField(
-            controller: illnessController,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              labelText: "Illness",
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
             ),
@@ -86,17 +75,14 @@ class _CreatePatientState extends State<CreatePatient> {
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(primary: Colors.green),
             onPressed: () async {
-              final fullname = fullnameController.text;
+              final name = nameController.text;
               final age = ageController.text;
-              final illness = illnessController.text;
 
-              final disPatient =
-                  await patient.create(fullname, age, illness, genderValue);
+              final disPatient = await patient.create(name, age);
 
               if (disPatient == 200) {
-                fullnameController.clear();
+                nameController.clear();
                 ageController.clear();
-                illnessController.clear();
                 setState(() {
                   genderValue = "Male";
                 });

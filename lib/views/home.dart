@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:patient/models/account.dart';
+import 'package:patient/models/user.dart';
 import 'package:patient/models/patient.dart';
 import './login.dart';
 import './patient/create_patient.dart';
@@ -256,7 +256,7 @@ class _HomeState extends State<Home> {
 
   Widget getPatients() {
     return FutureBuilder(
-      future: patient.get(),
+      future: patient.get(widget.user.token.toString()),
       builder: (context, AsyncSnapshot<List> snapshot) {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
@@ -282,23 +282,20 @@ class _HomeState extends State<Home> {
                         radius: 25,
                         backgroundColor: Colors.greenAccent),
                     title: Text(
-                      patient['fullname'].toString(),
+                      patient['name'].toString(),
                       style: const TextStyle(
                           fontFamily: "OpenSans",
                           fontSize: 17,
                           color: Colors.black),
                     ),
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => Profile(
-                              id: patient['_id'],
-                              fullname: patient['fullname'],
-                              age: patient['age'],
-                              illness: patient['illness'],
-                              gender: patient['gender']),
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => Profile(
+                          id: patient['_id'],
+                          name: patient['name'],
+                          age: patient['age'],
                         ),
-                      );
+                      ));
                     },
                   ),
                 );
