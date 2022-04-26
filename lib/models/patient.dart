@@ -2,22 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:patient/models/user.dart';
+import 'package:patient/models/medicine.dart';
 
 const domain = "medcab-rrc.herokuapp.com";
 
 class Patient {
   String? name;
-  String? age;
+  int? age;
 
   Patient();
 
-  Future<int> create(String _name, String _age) async {
-    final url = Uri.https(domain, "/patient");
+  Future<int> create(String _name, int _age, String _token) async {
+    final url = Uri.https(domain, "/patients");
 
     final headers = <String, String>{
       HttpHeaders.contentTypeHeader: ContentType.json.toString(),
       HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
     };
 
     final response = await http.post(url,
@@ -50,7 +51,7 @@ class Patient {
       HttpHeaders.acceptHeader: ContentType.json.toString(),
       HttpHeaders.authorizationHeader: "Bearer $token"
     };
-    List patient = [];
+
     final response = await http.get(url, headers: headers);
 
     final data = jsonDecode(response.body);
@@ -59,7 +60,7 @@ class Patient {
   }
 
   Future<int> delete(String id) async {
-    final String endPoint = "/patient/$id";
+    final String endPoint = "/patients/$id";
 
     final url = Uri.https(domain, endPoint);
 
@@ -78,5 +79,23 @@ class Patient {
     }
 
     return response.statusCode;
+  }
+
+  Future<List<Medicine>> getMedications(String _id, String _token) async {
+    final url = Uri.https(domain, "/patients/$_id/medications");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    final data = jsonDecode(response.body) as List<dynamic>;
+
+    final medicines = data.map((e) => Medicine.fromJson(e)).toList();
+
+    return medicines;
   }
 }
