@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/models/patient.dart';
+import 'package:patient/views/patient/list.dart';
 import './login.dart';
-import './patient/create_patient.dart';
+import 'patient/create.dart';
 import '../views/patient/Profile.dart';
 
 class Home extends StatefulWidget {
@@ -19,6 +20,7 @@ class _HomeState extends State<Home> {
   int tab_selected = 0;
 
   final patient = Patient();
+  final _user = User();
 
   final textStyle = const TextStyle(
       fontSize: 20,
@@ -49,13 +51,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-          backgroundColor: Colors.green,
-          centerTitle: true,
-          title: selected_screen == 0
-              ? Text("Set Schedule", style: textStyle)
-              : selected_screen == 1
-                  ? Text("Records", style: textStyle)
-                  : Text("Medicines", style: textStyle)),
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        title: const Text('Home'),
+      ),
       drawer: Drawer(
         backgroundColor: Colors.green[50],
         child: ListView(
@@ -77,10 +76,16 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 350),
             Center(
               child: TextButton.icon(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ));
+                onPressed: () async {
+                  final statusCode =
+                      await _user.logout(widget.user.token.toString());
+
+                  if (statusCode == 200) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => const Login()));
+                  }
                 },
                 icon: const Icon(Icons.logout, color: Colors.red),
                 label:
@@ -90,33 +95,35 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.green,
-          currentIndex: selected_screen,
-          items: const [
-            BottomNavigationBarItem(
-                backgroundColor: Colors.black,
-                icon: Icon(Icons.lock_clock_outlined),
-                label: 'Schedule'),
-            BottomNavigationBarItem(
-                backgroundColor: Colors.black,
-                icon: Icon(Icons.list),
-                label: 'Records'),
-            BottomNavigationBarItem(
-                backgroundColor: Colors.black,
-                icon: Icon(Icons.medication),
-                label: 'Medicine'),
-          ],
-          onTap: (index) {
-            setState(() {
-              selected_screen = index;
-            });
-          }),
-      body: selected_screen == 0
-          ? homeScreen(context)
-          : selected_screen == 1
-              ? recordScreen()
-              : medicineScreen(),
+      // bottomNavigationBar: BottomNavigationBar(
+      //     backgroundColor: Colors.green,
+      //     currentIndex: selected_screen,
+      //     items: const [
+      //       BottomNavigationBarItem(
+      //           backgroundColor: Colors.black,
+      //           icon: Icon(Icons.lock_clock_outlined),
+      //           label: 'Schedule'),
+      //       BottomNavigationBarItem(
+      //           backgroundColor: Colors.black,
+      //           icon: Icon(Icons.list),
+      //           label: 'Records'),
+      //       BottomNavigationBarItem(
+      //           backgroundColor: Colors.black,
+      //           icon: Icon(Icons.medication),
+      //           label: 'Medicine'),
+      //     ],
+      //     onTap: (index) {
+      //       setState(() {
+      //         selected_screen = index;
+      //       });
+      //     }),
+      body: homeScreen(context),
+
+      // selected_screen == 0
+      //     ? homeScreen(context)
+      //     : selected_screen == 1
+      //         ? recordScreen()
+      //         : medicineScreen(),
     );
   }
 
@@ -147,7 +154,7 @@ class _HomeState extends State<Home> {
 
   Widget homeScreen(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 120, 20, 25),
+      padding: const EdgeInsets.fromLTRB(20, 170, 20, 25),
       children: [
         Card(
           elevation: 10,
@@ -156,13 +163,15 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: ListTile(
-              leading: const Icon(Icons.date_range_outlined),
-              title: Text(getDate(),
-                  style: const TextStyle(
+              leading: const Icon(Icons.people),
+              title: const Text("Patients",
+                  style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 18,
                   )),
-              onTap: () => pickDate(context),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PatientList(widget.user),
+              )),
             ),
           ),
         ),
@@ -174,9 +183,9 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: ListTile(
-              leading: const Icon(Icons.timer),
-              title: Text(getTime(),
-                  style: const TextStyle(
+              leading: const Icon(Icons.medication),
+              title: const Text("Medicines",
+                  style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 18,
                   )),
@@ -189,11 +198,11 @@ class _HomeState extends State<Home> {
           elevation: 10,
           shape: RoundedRectangleBorder(
               side: const BorderSide(color: Colors.greenAccent, width: 1),
-              borderRadius: BorderRadius.circular(15)),
+              borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: ListTile(
-              leading: const Icon(Icons.medical_services_outlined),
-              title: const Text('SELECT MEDICINE',
+              leading: const Icon(Icons.local_drink_sharp),
+              title: const Text('Dispense',
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 18,
@@ -207,107 +216,34 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget recordScreen() {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.green,
-                toolbarHeight: 0,
-                bottom: TabBar(
-                  onTap: (index) {
-                    setState(() {
-                      tab_selected = index;
-                    });
-                  },
-                  tabs: const [
-                    Tab(
-                      child: Text('Patient',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    ),
-                    Tab(
-                      child: Text('History',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                )),
-            body: tab_selected == 0 ? patientRecord() : historyRecord()));
-  }
-
-  Widget patientRecord() {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          Icons.person_add,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.green,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CreatePatient(),
-          ));
-        },
-      ),
-      body: getPatients(),
-    );
-  }
-
-  Widget getPatients() {
-    return FutureBuilder(
-      future: patient.get(widget.user.token.toString()),
-      builder: (context, AsyncSnapshot<List> snapshot) {
-        final connectionDone = snapshot.connectionState == ConnectionState.done;
-        if (connectionDone && snapshot.hasData) {
-          final patients = snapshot.data!;
-          return ListView.builder(
-              padding: const EdgeInsets.all(5),
-              itemCount: patients.length,
-              itemBuilder: (context, index) {
-                final patient = patients[index];
-                return Card(
-                  color: const Color.fromARGB(255, 250, 247, 237),
-                  elevation: 20,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(5),
-                    minLeadingWidth: 0,
-                    leading: const CircleAvatar(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        ),
-                        radius: 25,
-                        backgroundColor: Colors.greenAccent),
-                    title: Text(
-                      patient['name'].toString(),
-                      style: const TextStyle(
-                          fontFamily: "OpenSans",
-                          fontSize: 17,
-                          color: Colors.black),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => Profile(
-                          id: patient['_id'],
-                          name: patient['name'],
-                          age: patient['age'],
-                        ),
-                      ));
-                    },
-                  ),
-                );
-              });
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
+  // Widget recordScreen() {
+  //   return DefaultTabController(
+  //       length: 2,
+  //       child: Scaffold(
+  //           appBar: AppBar(
+  //               backgroundColor: Colors.green,
+  //               toolbarHeight: 0,
+  //               bottom: TabBar(
+  //                 onTap: (index) {
+  //                   setState(() {
+  //                     tab_selected = index;
+  //                   });
+  //                 },
+  //                 tabs: const [
+  //                   Tab(
+  //                     child: Text('Patient',
+  //                         style: TextStyle(
+  //                             fontSize: 15, fontWeight: FontWeight.bold)),
+  //                   ),
+  //                   Tab(
+  //                     child: Text('History',
+  //                         style: TextStyle(
+  //                             fontSize: 15, fontWeight: FontWeight.bold)),
+  //                   ),
+  //                 ],
+  //               )),
+  //           body: tab_selected == 0 ? patientRecord() : historyRecord()));
+  // }
 
   Widget historyRecord() {
     return ListView(
