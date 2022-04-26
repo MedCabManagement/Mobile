@@ -40,4 +40,17 @@ class User {
     }
     return response.statusCode;
   }
+
+  Future<int> logout(String _token) async {
+    final url = Uri.https(domain, "/users/logout/");
+
+    final headers = <String, String>{
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+    final response = await http.post(
+      url,
+      headers: headers,
+    );
+    return response.statusCode;
+  }
 }
