@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:patient/models/medicine.dart';
+import 'package:patient/models/medication.dart';
+import 'package:patient/models/medicineInfo.dart';
 import 'package:patient/models/patient.dart';
 import 'package:patient/views/home.dart';
 
 class Profile extends StatefulWidget {
   final String name, id, token;
-  final String medication;
   final int age;
   const Profile(
       {required this.id,
       required this.name,
       required this.age,
-      required this.medication,
       required this.token,
       Key? key})
       : super(key: key);
@@ -27,7 +26,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.medication);
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -46,12 +44,13 @@ class _ProfileState extends State<Profile> {
           const SizedBox(height: 10),
           const Text("Name",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 17,
                   color: Colors.black54,
                   fontWeight: FontWeight.bold,
                   fontFamily: "OpenSans")),
           Card(
-              color: Colors.white60,
+              elevation: 3,
+              color: Colors.green[100],
               child: ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 leading:
@@ -60,35 +59,79 @@ class _ProfileState extends State<Profile> {
           const SizedBox(height: 5),
           const Text("Age",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 17,
                   color: Colors.black54,
                   fontWeight: FontWeight.bold,
                   fontFamily: "OpenSans")),
+          const SizedBox(height: 10),
           Card(
-              color: Colors.white60,
+              elevation: 3,
+              color: Colors.green[100],
               child: ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 leading: Text(widget.age.toString(),
                     style: const TextStyle(fontSize: 17)),
               )),
-          const SizedBox(height: 10),
-          Card(
-            child: ListTile(
-              leading: Text(widget.medication),
+          const SizedBox(height: 15),
+          const Center(
+              child: Text("Medication",
+                  style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "OpenSans"))),
+          Container(
+            padding: const EdgeInsets.all(2.0),
+            decoration: BoxDecoration(
+              color: Colors.blue[50],
+              borderRadius: BorderRadius.circular(15),
+              border:
+                  Border.all(color: const Color.fromARGB(255, 109, 178, 227)),
             ),
+            margin: const EdgeInsets.symmetric(vertical: 20.0),
+            height: 400,
+            child: getMed(),
           ),
-          TextButton.icon(
-              onPressed: () async {
-                final res = await patient.delete(widget.id);
-
-                if (res == 200) {
-                  Navigator.pop(context, true);
-                }
-              },
-              icon: const Icon(Icons.delete, color: Colors.red),
-              label: const Text("Delete", style: TextStyle(color: Colors.red)))
         ],
       ),
+    );
+  }
+
+  Widget getMed() {
+    return FutureBuilder(
+      future: patient.getMedication(widget.id, widget.token),
+      builder: (context, AsyncSnapshot<List<Medication>> snapshot) {
+        final connectionDone = snapshot.connectionState == ConnectionState.done;
+        if (connectionDone && snapshot.hasData) {
+          final medications = snapshot.data!;
+          return ListView.builder(
+              padding: const EdgeInsets.all(5),
+              itemCount: medications.length,
+              itemBuilder: (context, index) {
+                final medication = medications[index];
+                return Card(
+                  color: const Color.fromARGB(255, 250, 247, 237),
+                  elevation: 20,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: ListTile(
+                    minLeadingWidth: 0,
+                    leading: Text(
+                      medication.medicine.name.toString(),
+                      style: const TextStyle(
+                          fontFamily: "OpenSans",
+                          fontSize: 17,
+                          color: Colors.black),
+                    ),
+                  ),
+                );
+              });
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
