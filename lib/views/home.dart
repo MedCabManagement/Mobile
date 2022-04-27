@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:patient/models/medicineInfo.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/models/patient.dart';
 import 'package:patient/views/patient/list.dart';
+import 'package:patient/views/medicine/list.dart';
+
 import './login.dart';
 import 'patient/create.dart';
 import '../views/patient/Profile.dart';
@@ -189,7 +192,9 @@ class _HomeState extends State<Home> {
                     fontFamily: 'OpenSans',
                     fontSize: 18,
                   )),
-              onTap: () => pickTime(context),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MedicineList(widget.user),
+              )),
             ),
           ),
         ),
