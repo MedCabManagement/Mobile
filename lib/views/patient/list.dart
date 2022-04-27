@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:patient/models/patient.dart';
 import 'package:patient/models/user.dart';
@@ -14,7 +16,9 @@ class PatientList extends StatefulWidget {
 }
 
 class _PatientListState extends State<PatientList> {
-  final patient = Patient();
+  final _patient = Patient();
+
+  bool onTapPressed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +62,7 @@ class _PatientListState extends State<PatientList> {
 
   Widget getPatients() {
     return FutureBuilder(
-      future: patient.get(widget.user.token.toString()),
+      future: _patient.get(widget.user.token.toString()),
       builder: (context, AsyncSnapshot<List> snapshot) {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
@@ -90,15 +94,21 @@ class _PatientListState extends State<PatientList> {
                           fontSize: 17,
                           color: Colors.black),
                     ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => Profile(
-                          id: patient['_id'],
-                          name: patient['name'],
-                          age: patient['age'],
-                          token: widget.user.token.toString(),
-                        ),
-                      ));
+                    onTap: () async {
+                      final _dispatient = await _patient.getPatient(
+                          patient['_id'], widget.user.token.toString());
+
+                      if (_dispatient.length > 0) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => Profile(
+                            id: _dispatient['_id'],
+                            name: _dispatient['name'],
+                            age: _dispatient['age'],
+                            medication: _dispatient['medications'].toString(),
+                            token: widget.user.token.toString(),
+                          ),
+                        ));
+                      }
                     },
                   ),
                 );
