@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:patient/models/medicine.dart';
+import 'package:patient/models/patientInfo.dart';
 
 const domain = "medcab-rrc.herokuapp.com";
 
@@ -81,9 +82,26 @@ class Patient {
     return response.statusCode;
   }
 
-  Future<List<Medicine>> getMedications(String _id, String _token) async {
-    final url = Uri.https(domain, "/patients/$_id/medications");
+  // Future<List<Medicine>> getMedications(String _id, String _token) async {
+  //   final url = Uri.https(domain, "/patients/$_id/medications");
 
+  //   final headers = <String, String>{
+  //     HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+  //     HttpHeaders.acceptHeader: ContentType.json.toString(),
+  //     HttpHeaders.authorizationHeader: "Bearer $_token"
+  //   };
+
+  //   final response = await http.get(url, headers: headers);
+
+  //   final data = jsonDecode(response.body) as List<dynamic>;
+
+  //   final medicines = data.map((e) => Medicine.fromJson(e)).toList();
+
+  //   return medicines;
+  // }
+
+  Future getPatient(String _id, String _token) async {
+    final url = Uri.https(domain, "/patients/$_id/");
     final headers = <String, String>{
       HttpHeaders.contentTypeHeader: ContentType.json.toString(),
       HttpHeaders.acceptHeader: ContentType.json.toString(),
@@ -92,10 +110,10 @@ class Patient {
 
     final response = await http.get(url, headers: headers);
 
-    final data = jsonDecode(response.body) as List<dynamic>;
+    final data = jsonDecode(response.body);
 
-    final medicines = data.map((e) => Medicine.fromJson(e)).toList();
+    // print(data);
 
-    return medicines;
+    return data;
   }
 }
