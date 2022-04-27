@@ -95,20 +95,18 @@ class _PatientListState extends State<PatientList> {
                           color: Colors.black),
                     ),
                     onTap: () async {
-                      final _dispatient = await _patient.getPatient(
-                          patient['_id'], widget.user.token.toString());
+                      // final _dispatient = await _patient.getPatient(
+                      //     patient['_id'], widget.user.token.toString());
 
-                      if (_dispatient.length > 0) {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => Profile(
-                            id: _dispatient['_id'],
-                            name: _dispatient['name'],
-                            age: _dispatient['age'],
-                            medication: _dispatient['medications'].toString(),
+                            id: patient['_id'],
+                            name: patient['name'],
+                            age: patient['age'],
                             token: widget.user.token.toString(),
                           ),
                         ));
-                      }
+                      
                     },
                   ),
                 );
