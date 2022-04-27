@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:patient/models/medicine.dart';
-import 'package:patient/models/patientInfo.dart';
+import 'package:patient/models/medication.dart';
 
 const domain = "medcab-rrc.herokuapp.com";
 
@@ -115,5 +114,24 @@ class Patient {
     // print(data);
 
     return data;
+  }
+
+  Future<List<Medication>> getMedication(String _id, String _token) async {
+    final url = Uri.https(domain, "/patients/$_id/medications");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    final data = jsonDecode(response.body) as List<dynamic>;
+
+    final med = data.map((e) => Medication.fromJson(e)).toList();
+
+    return med;
+
   }
 }
