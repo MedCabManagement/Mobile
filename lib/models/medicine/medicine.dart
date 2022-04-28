@@ -28,7 +28,29 @@ class Medicine {
     return data;
   }
 
-  Future<int> post(String _name, int _quantity, int _container, String _token) async {
+  Future getMedicine(String _id, String _token) async {
+    if (_id == "") {
+      return {"name": "", "_id": "", "container": ""};
+    }
+    final url = Uri.https(domain, "/medicines/$_id");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    final data = jsonDecode(response.body);
+
+    // print(data);
+
+    return data;
+  }
+
+  Future<int> post(
+      String _name, int _quantity, int _container, String _token) async {
     final url = Uri.https(domain, "/medicines");
 
     final headers = <String, String>{
@@ -39,8 +61,11 @@ class Medicine {
 
     final response = await http.post(url,
         headers: headers,
-        body: jsonEncode(
-            {"name": _name, "container": _container, "quantity": _quantity}));
+        body: jsonEncode({
+          "name": _name,
+          "container": _container,
+          "quantity": _quantity,
+        }));
 
     final data = jsonDecode(response.body);
 
