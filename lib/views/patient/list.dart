@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:patient/models/patient.dart';
+import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/views/patient/Profile.dart';
 import 'package:patient/views/patient/create.dart';
@@ -42,7 +42,7 @@ class _PatientListState extends State<PatientList> {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        title: const Text("Patient List"),
+        title: const Text("Patients"),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(

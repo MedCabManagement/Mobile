@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:patient/models/patient.dart';
+import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/views/patient/list.dart';
 
@@ -61,11 +61,13 @@ class _CreatePatientState extends State<CreatePatient> {
             children: [
               TextFormField(
                 validator: (value) {
-                  if (value == null || value.isEmpty) return "Please Enter Name";
+                  if (value == null || value.isEmpty)
+                    return "Please Enter Name";
                 },
                 controller: nameController,
                 keyboardType: TextInputType.name,
                 decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.person),
                   labelText: "Name",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -79,6 +81,7 @@ class _CreatePatientState extends State<CreatePatient> {
                 controller: ageController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.person),
                   labelText: "Age",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -95,11 +98,10 @@ class _CreatePatientState extends State<CreatePatient> {
                         name, age, widget.user.token.toString());
 
                     if (disPatient == 200) {
-                      nameController.clear();
-                      ageController.clear();
-                      setState(() {
-                        genderValue = "Male";
-                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatientList(widget.user)));
                     }
                   }
                 },

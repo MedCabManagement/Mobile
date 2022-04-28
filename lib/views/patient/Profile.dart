@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:patient/models/medication.dart';
-import 'package:patient/models/medicineInfo.dart';
-import 'package:patient/models/patient.dart';
+import 'package:patient/models/medication/medication.dart';
+import 'package:patient/models/medicine/medicineInfo.dart';
+import 'package:patient/models/patient/patient.dart';
 import 'package:patient/views/home.dart';
+import 'package:patient/views/patient/medication/add.dart';
 
 class Profile extends StatefulWidget {
   final String name, id, token;
@@ -37,6 +38,23 @@ class _ProfileState extends State<Profile> {
               onPressed: () {},
               child: const Icon(Icons.edit, color: Colors.black))
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blueGrey,
+        child: Row(
+          children: [
+            const Spacer(),
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => AddMedication(widget.token),
+                        )),
+                    child: const Icon(Icons.add, color: Colors.white,))),
+                    
+            const Spacer(),
+          ],
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(15),
@@ -89,7 +107,7 @@ class _ProfileState extends State<Profile> {
                   Border.all(color: const Color.fromARGB(255, 109, 178, 227)),
             ),
             margin: const EdgeInsets.symmetric(vertical: 20.0),
-            height: 400,
+            height: 350,
             child: getMed(),
           ),
         ],

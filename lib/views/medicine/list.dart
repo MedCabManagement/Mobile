@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:patient/models/medicine.dart';
+import 'package:patient/models/medicine/medicine.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/views/home.dart';
+import 'package:patient/views/medicine/create.dart';
 
 class MedicineList extends StatefulWidget {
   final User user;
@@ -18,10 +20,24 @@ class _MedicineListState extends State<MedicineList> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
+        leading: TextButton(
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Home(widget.user),
+              ),
+            );
+          },
+        ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        title: const Text("Medicine List"),
+        title: const Text("Medicines"),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
@@ -30,9 +46,9 @@ class _MedicineListState extends State<MedicineList> {
         ),
         backgroundColor: Colors.green,
         onPressed: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //   builder: (context) => CreatePatient(widget.user),
-          // ));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateMedicine(widget.user),
+          ));
         },
       ),
       body: getMedicines(),
@@ -52,21 +68,14 @@ class _MedicineListState extends State<MedicineList> {
               itemBuilder: (context, index) {
                 final patient = patients[index];
                 return Card(
-                  color: Color.fromARGB(255, 237, 241, 242),
+                  color: const Color.fromARGB(255, 196, 234, 243),
                   elevation: 20,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.fromLTRB(20,5,5,5),
                     minLeadingWidth: 0,
-                    leading: const CircleAvatar(
-                        child: Icon(
-                          Icons.medication_liquid,
-                          color: Colors.green,
-                        ),
-                        radius: 15,
-                        backgroundColor: Colors.white),
-                    title: Text(
+                    leading: Text(
                       patient['name'].toString(),
                       style: const TextStyle(
                           fontFamily: "OpenSans",
