@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:patient/models/medicineInfo.dart';
+import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/user.dart';
-import 'package:patient/models/patient.dart';
+import 'package:patient/models/patient/patient.dart';
 import 'package:patient/views/patient/list.dart';
 import 'package:patient/views/medicine/list.dart';
 
@@ -166,6 +166,7 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               leading: const Icon(Icons.people),
               title: const Text("Patients",
                   style: TextStyle(
@@ -186,6 +187,7 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               leading: const Icon(Icons.medication),
               title: const Text("Medicines",
                   style: TextStyle(
@@ -206,6 +208,7 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               leading: const Icon(Icons.local_drink_sharp),
               title: const Text('Dispense',
                   style: TextStyle(
