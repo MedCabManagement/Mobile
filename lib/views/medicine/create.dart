@@ -54,8 +54,8 @@ class _CreateMedicineState extends State<CreateMedicine> {
                         if (_formKey.currentState!.validate()) {
                           final statusCode = await medicine.post(
                               name,
-                              int.parse(container),
                               int.parse(quantity),
+                              int.parse(container),
                               widget.user.token.toString());
                           if (statusCode == 200) {
                             Navigator.push(
@@ -94,12 +94,12 @@ class _CreateMedicineState extends State<CreateMedicine> {
               const SizedBox(height: 10),
               TextFormField(
                 validator: (value) {
-           
-                  if (value == null ||value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return "Enter Field Container";
                   } else if (int.parse(value) > 5 || int.parse(value) == 0) {
                     return "Enter only 1-5 container";
-                  };
+                  }
+                  ;
                 },
                 controller: containerController,
                 keyboardType: TextInputType.number,
