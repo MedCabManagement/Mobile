@@ -29,9 +29,7 @@ class Medicine {
   }
 
   Future getMedicine(String _id, String _token) async {
-    if (_id == "") {
-      return {"name": "", "_id": "", "container": ""};
-    }
+    
     final url = Uri.https(domain, "/medicines/$_id");
 
     final headers = <String, String>{
@@ -45,6 +43,10 @@ class Medicine {
     final data = jsonDecode(response.body);
 
     // print(data);
+
+    if (_id == "") {
+      return data[0];
+    }
 
     return data;
   }
