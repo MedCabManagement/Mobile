@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.all(5),
                 child: TextButton(
                     onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => AddMedication(widget.token),
+                          builder: (BuildContext context) => AddMedication(widget.token, widget.id),
                         )),
                     child: const Icon(Icons.add, color: Colors.white,))),
                     
