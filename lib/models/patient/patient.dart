@@ -132,6 +132,34 @@ class Patient {
     final med = data.map((e) => Medication.fromJson(e)).toList();
 
     return med;
+  }
 
+  Future<int> addMedication(String _id, String _medicineId, String _token) async {
+    final url = Uri.https(domain, "/patients/$_id/medications");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.post(url,
+        headers: headers,
+        body: jsonEncode({
+          "medicine": _medicineId,
+        }));
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == HttpStatus.ok) {
+      Fluttertoast.showToast(
+        msg: 'Medicine Succesfully Added',
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } else {}
+
+    print(response.statusCode);
+
+    return response.statusCode;
   }
 }
