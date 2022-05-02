@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patient/views/patient/Profile.dart';
 import './views//login.dart';
 
 void main() {

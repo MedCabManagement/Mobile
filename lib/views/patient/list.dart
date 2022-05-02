@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
@@ -103,7 +101,7 @@ class _PatientListState extends State<PatientList> {
                             id: patient['_id'],
                             name: patient['name'],
                             age: patient['age'],
-                            token: widget.user.token.toString(),
+                            user: widget.user,
                           ),
                         ));
                       

@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:patient/models/medication/medication.dart';
 import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/patient/patient.dart';
+import 'package:patient/models/user.dart';
 import 'package:patient/views/home.dart';
+import 'package:patient/views/patient/list.dart';
 import 'package:patient/views/patient/medication/add.dart';
+import 'package:patient/views/patient/medication/view.dart';
 
 class Profile extends StatefulWidget {
-  final String name, id, token;
+  final String name, id;
+  final User user;
   final int age;
   const Profile(
       {required this.id,
       required this.name,
       required this.age,
-      required this.token,
+      required this.user,
       Key? key})
       : super(key: key);
 
@@ -30,6 +34,21 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: TextButton(
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PatientList(widget.user),
+              ),
+            );
+          },
+        ),
         backgroundColor: Colors.green,
         centerTitle: true,
         title: const Text('Profile'),
@@ -47,11 +66,15 @@ class _ProfileState extends State<Profile> {
             Padding(
                 padding: const EdgeInsets.all(5),
                 child: TextButton(
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => AddMedication(widget.token, widget.id),
+                    onPressed: () =>
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => AddMedication(
+                              widget.id, widget.name, widget.age, widget.user),
                         )),
-                    child: const Icon(Icons.add, color: Colors.white,))),
-                    
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ))),
             const Spacer(),
           ],
         ),
@@ -107,7 +130,7 @@ class _ProfileState extends State<Profile> {
                   Border.all(color: const Color.fromARGB(255, 109, 178, 227)),
             ),
             margin: const EdgeInsets.symmetric(vertical: 20.0),
-            height: 350,
+            height: 360,
             child: getMed(),
           ),
         ],
@@ -117,7 +140,7 @@ class _ProfileState extends State<Profile> {
 
   Widget getMed() {
     return FutureBuilder(
-      future: patient.getMedication(widget.id, widget.token),
+      future: patient.getMedications(widget.id, widget.user.token.toString()),
       builder: (context, AsyncSnapshot<List<Medication>> snapshot) {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
@@ -127,6 +150,7 @@ class _ProfileState extends State<Profile> {
               itemCount: medications.length,
               itemBuilder: (context, index) {
                 final medication = medications[index];
+                // print(medication.id.toString());
                 return Card(
                   color: const Color.fromARGB(255, 250, 247, 237),
                   elevation: 20,
@@ -141,6 +165,14 @@ class _ProfileState extends State<Profile> {
                           fontSize: 17,
                           color: Colors.black),
                     ),
+                    onTap: () {
+
+                      Navigator.of(context)
+                          .popUntil((route) => Navigator.of(context).canPop());
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ViewMeds(medication, widget.id, widget.user.token.toString()),
+                      ));
+                    },
                   ),
                 );
               });

@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:patient/models/medicine/medicine.dart';
 import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/patient/patient.dart';
+import 'package:patient/models/user.dart';
+import 'package:patient/views/patient/Profile.dart';
 
 class AddMedication extends StatefulWidget {
-  final String token, id;
-  const AddMedication(this.token, this.id, {Key? key}) : super(key: key);
+  final String id, name;
+  final int age;
+  final User user;
+  const AddMedication(this.id, this.name, this.age, this.user, {Key? key})
+      : super(key: key);
 
   @override
   State<AddMedication> createState() => _AddMedicationState();
@@ -33,7 +38,7 @@ class _AddMedicationState extends State<AddMedication> {
     final headers = <String, String>{
       HttpHeaders.contentTypeHeader: ContentType.json.toString(),
       HttpHeaders.acceptHeader: ContentType.json.toString(),
-      HttpHeaders.authorizationHeader: "Bearer ${widget.token.toString()}"
+      HttpHeaders.authorizationHeader: "Bearer ${widget.user.token.toString()}"
     };
 
     final response = await http.get(url, headers: headers);
@@ -103,7 +108,7 @@ class _AddMedicationState extends State<AddMedication> {
               width: 10,
               child: FutureBuilder(
                 future:
-                    medicine.getMedicine(selectval, widget.token.toString()),
+                    medicine.getMedicine(selectval, widget.user.token.toString()),
                 builder: (context, AsyncSnapshot snapshot) {
                   final connectionDone =
                       snapshot.connectionState == ConnectionState.done;
@@ -156,11 +161,30 @@ class _AddMedicationState extends State<AddMedication> {
             visible: visible,
             child: TextButton(
               onPressed: () async {
-                final statusCode = await patient.addMedication(widget.id, selectval, widget.token);
+                final statusCode = await patient.addMedication(
+                    widget.id, selectval, widget.user.token.toString());
 
-                print(statusCode);
+                setState(() {
+                  visible = false;
+                });
+
+                if (statusCode == 200) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile(
+                              id: widget.id,
+                              name: widget.name,
+                              age: widget.age,
+                              user: widget.user)));
+                } else {
+                  setState(() {
+                    visible = true;
+                  });
+                }
               },
-              child: const Text("ADD MEDICINE", style: TextStyle(color: Colors.white)),
+              child: const Text("ADD MEDICINE",
+                  style: TextStyle(color: Colors.white)),
             )),
       ),
     );

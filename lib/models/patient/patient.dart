@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:patient/models/medication/medication.dart';
+import 'package:patient/models/schedule/schedule.dart';
+import 'package:patient/views/patient/medication/schedules/view.dart';
 
 const domain = "medcab-rrc.herokuapp.com";
 
@@ -116,7 +118,7 @@ class Patient {
     return data;
   }
 
-  Future<List<Medication>> getMedication(String _id, String _token) async {
+  Future<List<Medication>> getMedications(String _id, String _token) async {
     final url = Uri.https(domain, "/patients/$_id/medications");
 
     final headers = <String, String>{
@@ -161,5 +163,29 @@ class Patient {
     print(response.statusCode);
 
     return response.statusCode;
+  }
+  Future<List<Schedule>> getOneMedication(String _id, String _medId, String _token) async {
+    
+    final url = Uri.https(domain, "/patients/$_id/medications/$_medId");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    final data = jsonDecode(response.body);
+
+    // data["schedules"] as List<dynamic>).map((e) => Schedule.fromJson(e)).toList();
+
+    final schedules = (data["schedules"] as List<dynamic>).map((e) => Schedule.fromJson(e)).toList();
+
+    print(schedules);
+
+    
+
+    return schedules;
   }
 }
