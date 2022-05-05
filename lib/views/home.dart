@@ -84,6 +84,8 @@ class _HomeState extends State<Home> {
                       await _user.logout(widget.user.token.toString());
 
                   if (statusCode == 200) {
+                    Navigator.popUntil(
+                        context, (route) => Navigator.canPop(context));
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
