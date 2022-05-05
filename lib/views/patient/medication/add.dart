@@ -93,7 +93,7 @@ class _AddMedicationState extends State<AddMedication> {
                       },
                       items: snapshot.data!.map((items) {
                         return DropdownMenuItem(
-                          child: Text(items["name"]),
+                          child: Text(items["name"].toString()),
                           value: items["_id"],
                         );
                       }).toList(),
@@ -107,8 +107,8 @@ class _AddMedicationState extends State<AddMedication> {
               height: 200,
               width: 10,
               child: FutureBuilder(
-                future:
-                    medicine.getMedicine(selectval, widget.user.token.toString()),
+                future: medicine.getMedicine(
+                    selectval, widget.user.token.toString()),
                 builder: (context, AsyncSnapshot snapshot) {
                   final connectionDone =
                       snapshot.connectionState == ConnectionState.done;
