@@ -28,6 +28,10 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   intl: ^0.17.0
+  flutter_time_picker_spinner: ^2.0.0
+  rflutter_alert: ^2.0.4
+  multi_select_item: ^1.0.3
+  auto_size_text: ^3.0.0-nullsafety.0
   flutter:
     sdk: flutter
 
