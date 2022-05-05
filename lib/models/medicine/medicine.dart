@@ -29,7 +29,6 @@ class Medicine {
   }
 
   Future getMedicine(String _id, String _token) async {
-    
     final url = Uri.https(domain, "/medicines/$_id");
 
     final headers = <String, String>{
@@ -78,6 +77,55 @@ class Medicine {
 
       Fluttertoast.showToast(
         msg: 'Medicine has been added',
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } else {}
+
+    return response.statusCode;
+  }
+
+  Future<int> edit(String _medID, String _name, int _quantity, int _container,
+      String _token) async {
+    final url = Uri.https(domain, "/medicines/$_medID");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.patch(url,
+        headers: headers,
+        body: jsonEncode({
+          "name": _name,
+          "quantity": _quantity,
+          "container": _container,
+        }));
+
+    if (response.statusCode == HttpStatus.ok) {
+      Fluttertoast.showToast(
+        msg: 'Medicine has been updated',
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } else {}
+
+    return response.statusCode;
+  }
+
+  Future<int> delete(String _medID, String _token) async {
+    final url = Uri.https(domain, "/medicines/$_medID");
+
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.acceptHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: "Bearer $_token"
+    };
+
+    final response = await http.delete(url, headers: headers);
+
+    if (response.statusCode == HttpStatus.ok) {
+      Fluttertoast.showToast(
+        msg: 'Medicine has been deleted!',
         toastLength: Toast.LENGTH_LONG,
       );
     } else {}
