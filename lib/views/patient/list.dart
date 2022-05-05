@@ -18,6 +18,20 @@ class _PatientListState extends State<PatientList> {
 
   bool onTapPressed = true;
 
+  bool visible = true;
+  bool valuefirst = false;
+
+  refresh() {
+    return _patient.get(widget.user.token.toString());
+  }
+
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(milliseconds: 0));
+    setState(() {
+      refresh();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +68,10 @@ class _PatientListState extends State<PatientList> {
           ));
         },
       ),
-      body: getPatients(),
+      body: RefreshIndicator(
+        onRefresh: refreshList,
+        child: getPatients(),
+      ),
     );
   }
 
@@ -76,6 +93,19 @@ class _PatientListState extends State<PatientList> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: ListTile(
+                    trailing: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 17,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
                     contentPadding: const EdgeInsets.all(5),
                     minLeadingWidth: 0,
                     leading: const CircleAvatar(
@@ -96,15 +126,14 @@ class _PatientListState extends State<PatientList> {
                       // final _dispatient = await _patient.getPatient(
                       //     patient['_id'], widget.user.token.toString());
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => Profile(
-                            id: patient['_id'],
-                            name: patient['name'],
-                            age: patient['age'],
-                            user: widget.user,
-                          ),
-                        ));
-                      
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => Profile(
+                          id: patient['_id'],
+                          name: patient['name'].toString(),
+                          age: patient['age'],
+                          user: widget.user,
+                        ),
+                      ));
                     },
                   ),
                 );
