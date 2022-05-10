@@ -220,6 +220,14 @@ class _ViewMedsState extends State<ViewMeds> {
                             snapshot.connectionState == ConnectionState.done;
                         if (connectionDone && snapshot.hasData) {
                           final schedules = snapshot.data!;
+
+                          if (schedules.isEmpty) {
+                            return const Center(
+                              child: Text("Empty",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black)),
+                            );
+                          }
                           // print(schedules);
                           return ListView.builder(
                               padding: const EdgeInsets.all(5),

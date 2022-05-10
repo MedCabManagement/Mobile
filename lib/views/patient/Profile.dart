@@ -311,6 +311,12 @@ class _ProfileState extends State<Profile> {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
           final medications = snapshot.data!;
+          if (medications.isEmpty) {
+            return const Center(
+              child: Text("Empty",
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
+            );
+          }
           return ListView.builder(
               padding: const EdgeInsets.all(5),
               itemCount: medications.length,

@@ -82,6 +82,13 @@ class _PatientListState extends State<PatientList> {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
           final patients = snapshot.data!;
+
+          if (patients.isEmpty) {
+            return const Center(
+              child: Text("Empty",
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
+            );
+          }
           return ListView.builder(
               padding: const EdgeInsets.all(5),
               itemCount: patients.length,

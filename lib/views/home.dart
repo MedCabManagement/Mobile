@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/models/patient/patient.dart';
+import 'package:patient/views/logs/view.dart';
 import 'package:patient/views/patient/list.dart';
 import 'package:patient/views/medicine/list.dart';
 
@@ -209,17 +210,18 @@ class _HomeState extends State<Home> {
               side: const BorderSide(color: Colors.greenAccent, width: 1),
               borderRadius: BorderRadius.circular(10)),
           child: Center(
-            child: ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              leading: const Icon(Icons.local_drink_sharp),
-              title: const Text('Dispense',
-                  style: TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 18,
-                  )),
-              onTap: () {},
-            ),
-          ),
+              child: ListTile(
+            contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            leading: const Icon(Icons.local_drink_sharp),
+            title: const Text('Dispense Logs',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 18,
+                )),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Logs(widget.user),
+            )),
+          )),
         ),
         const SizedBox(height: 10.0),
       ],

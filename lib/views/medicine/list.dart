@@ -77,6 +77,13 @@ class _MedicineListState extends State<MedicineList> {
         final connectionDone = snapshot.connectionState == ConnectionState.done;
         if (connectionDone && snapshot.hasData) {
           final medicines = snapshot.data!;
+
+          if (medicines.isEmpty) {
+            return const Center(
+              child: Text("Empty",
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
+            );
+          }
           return ListView.builder(
               padding: const EdgeInsets.all(5),
               itemCount: medicines.length,

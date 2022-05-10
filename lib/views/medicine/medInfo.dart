@@ -44,6 +44,7 @@ class _MedInfoState extends State<MedInfo> {
       containerController.text = widget.container.toString();
     }
     return Scaffold(
+      backgroundColor: Colors.green[50],
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
