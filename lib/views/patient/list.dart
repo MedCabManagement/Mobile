@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/patient/Profile.dart';
 import 'package:patient/views/patient/create.dart';
 import 'package:patient/views/home.dart';
@@ -52,7 +53,7 @@ class _PatientListState extends State<PatientList> {
             );
           },
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text("Patients"),
       ),
@@ -61,7 +62,7 @@ class _PatientListState extends State<PatientList> {
           Icons.person_add,
           color: Colors.white,
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CreatePatient(widget.user),

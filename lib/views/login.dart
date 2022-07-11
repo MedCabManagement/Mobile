@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patient/fade_animation.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/views/home.dart';
 
@@ -109,10 +110,8 @@ class _LoginState extends State<Login> {
                                   if (statusCode == 200) {
                                     Navigator.of(context).popUntil((route) =>
                                         Navigator.of(context).canPop());
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) => Home(user),
-                                    ));
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (context) => FadeAnimation(0.6, Home(user))));
                                   } else {
                                     setState(() {
                                       inputFieldEnabled = true;

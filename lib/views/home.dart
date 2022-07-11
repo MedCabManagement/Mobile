@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:patient/fade_animation.dart';
 import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/user.dart';
 import 'package:patient/models/patient/patient.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/logs/view.dart';
 import 'package:patient/views/patient/list.dart';
 import 'package:patient/views/medicine/list.dart';
@@ -55,7 +57,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text('Home'),
       ),
@@ -177,8 +179,7 @@ class _HomeState extends State<Home> {
                     fontSize: 18,
                   )),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PatientList(widget.user),
-              )),
+                  builder: (context) => FadeAnimation(-1, PatientList(widget.user)))),
             ),
           ),
         ),
@@ -198,7 +199,7 @@ class _HomeState extends State<Home> {
                     fontSize: 18,
                   )),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MedicineList(widget.user),
+                builder: (context) =>  FadeAnimation(-1, MedicineList(widget.user)),
               )),
             ),
           ),
@@ -219,7 +220,7 @@ class _HomeState extends State<Home> {
                   fontSize: 18,
                 )),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Logs(widget.user),
+              builder: (context) => FadeAnimation(-1, Logs(widget.user)),
             )),
           )),
         ),

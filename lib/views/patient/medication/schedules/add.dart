@@ -3,6 +3,7 @@ import 'package:patient/models/medication/medication.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/schedule/schedule.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:patient/theme/theme.dart';
 
 class AddSchedule extends StatefulWidget {
   final String id, token, medID;
@@ -72,7 +73,7 @@ class _AddScheduleState extends State<AddSchedule> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text("Set Schedule"),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patient/models/medicine/medicine.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/home.dart';
 import 'package:patient/views/medicine/create.dart';
 import 'package:patient/views/medicine/medInfo.dart';
@@ -48,7 +49,7 @@ class _MedicineListState extends State<MedicineList> {
               );
             },
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: CustomColors.customGreen,
           centerTitle: true,
           title: const Text("Medicines"),
         ),
@@ -57,7 +58,7 @@ class _MedicineListState extends State<MedicineList> {
             Icons.add,
             color: Colors.white,
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: CustomColors.customGreen,
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => CreateMedicine(widget.user),

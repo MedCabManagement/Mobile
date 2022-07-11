@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patient/models/medicine/medicine.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/medicine/list.dart';
 
 class CreateMedicine extends StatefulWidget {
@@ -29,7 +30,7 @@ class _CreateMedicineState extends State<CreateMedicine> {
           toolbarHeight: 0,
         ),
         bottomNavigationBar: BottomAppBar(
-          color: const Color.fromARGB(255, 51, 118, 56),
+          color: CustomColors.customGreen,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

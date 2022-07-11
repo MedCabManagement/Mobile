@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:patient/models/medication/medication.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/schedule/schedule.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/patient/medication/view.dart';
 
 class EditSchedule extends StatefulWidget {
@@ -68,7 +69,7 @@ class _EditScheduleState extends State<EditSchedule> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text("Edit"),
       ),

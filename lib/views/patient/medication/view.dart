@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/models/medication/medication.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/schedule/schedule.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/patient/medication/schedules/add.dart';
 import 'package:patient/views/patient/medication/schedules/edit.dart';
 import 'dart:ui' show ImageFilter;
@@ -73,7 +74,7 @@ class _ViewMedsState extends State<ViewMeds> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor: CustomColors.customGreen,
           automaticallyImplyLeading: true,
           centerTitle: true,
           title: const Text("Medication"),

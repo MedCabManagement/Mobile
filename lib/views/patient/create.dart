@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/patient/list.dart';
+import 'package:patient/widgets/custom_button.dart';
 
 class CreatePatient extends StatefulWidget {
   final User user;
@@ -14,6 +16,7 @@ class CreatePatient extends StatefulWidget {
 class _CreatePatientState extends State<CreatePatient> {
   final nameController = TextEditingController();
   final ageController = TextEditingController();
+  bool _load = false;
 
   final patient = Patient();
   final _formKey = GlobalKey<FormState>();
@@ -88,26 +91,55 @@ class _CreatePatientState extends State<CreatePatient> {
                 ),
               ),
               const SizedBox(height: 40),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(primary: Colors.green),
+
+              CustomButton(
+                text: 'Create',
+                showProgressIndicator: _load,
+                color: CustomColors.customGreen,
                 onPressed: () async {
+                    setState(() {
+                      _load = true;
+                    });
                   if (_formKey.currentState!.validate()) {
                     final name = nameController.text;
                     final age = int.parse(ageController.text);
                     final disPatient = await patient.create(
                         name, age, widget.user.token.toString());
-
+            
                     if (disPatient == 200) {
+  
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => PatientList(widget.user)));
                     }
+                  } else {
+                      Future.delayed(const Duration(milliseconds: 350), () {
+                      setState(() => { _load = false});
+                    });
                   }
                 },
-                icon: const Icon(Icons.send),
-                label: const Text('Create'),
               )
+              // ElevatedButton.icon(
+              //   style: ElevatedButton.styleFrom(primary: Colors.green),
+                // onPressed: () async {
+                //   if (_formKey.currentState!.validate()) {
+                //     final name = nameController.text;
+                //     final age = int.parse(ageController.text);
+                //     final disPatient = await patient.create(
+                //         name, age, widget.user.token.toString());
+
+                //     if (disPatient == 200) {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => PatientList(widget.user)));
+                //     }
+                //   }
+                // },
+              //   icon: const Icon(Icons.send),
+              //   label: const Text('Create'),
+              // )
             ],
           )),
     );

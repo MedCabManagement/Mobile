@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patient/models/medicine/medicine.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/medicine/list.dart';
 
 class MedInfo extends StatefulWidget {
@@ -47,7 +48,7 @@ class _MedInfoState extends State<MedInfo> {
       backgroundColor: Colors.green[50],
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text("Medicine Info"),
         leading: TextButton(

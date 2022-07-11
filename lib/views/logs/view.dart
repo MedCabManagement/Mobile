@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:patient/models/Log/log.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
+import 'package:patient/views/logs/log_details.dart';
 
 class Logs extends StatefulWidget {
   final User user;
@@ -15,38 +18,32 @@ class Logs extends StatefulWidget {
 }
 
 class _LogsState extends State<Logs> {
+  final log = Log();
+
+  fetch() {
+    return log.refresh(widget.user.token.toString());
+  }
+
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(milliseconds: 0));
+    setState(() {
+      fetch();
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text("Logs"),
       ),
-      body: FutureBuilder(
-        future: () async {
-          final url = Uri.https("medcab-rrc.herokuapp.com", "/logs");
-          final String token = widget.user.token.toString();
-
-          final headers = <String, String>{
-            HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-            HttpHeaders.acceptHeader: ContentType.json.toString(),
-            HttpHeaders.authorizationHeader: "Bearer $token"
-          };
-
-          final response = await http.get(url, headers: headers);
-
-          final data = jsonDecode(response.body);
-
-          return (data as List<dynamic>)
-              .map((log) => Log(
-                  patientID: log['patientId'],
-                  medicineName: log['medicineName'],
-                  schedule: log['schedule'],
-                  status: log['status']))
-              .toList();
-        }(),
+      body: RefreshIndicator(
+        onRefresh: refreshList,
+        child: FutureBuilder(
+        future: fetch(),
         builder: (context, AsyncSnapshot<List<Log>> snapshot) {
           final connectionDone =
               snapshot.connectionState == ConnectionState.done;
@@ -65,6 +62,14 @@ class _LogsState extends State<Logs> {
                 itemCount: logs.length,
                 itemBuilder: (context, index) {
                   final log = logs[index];
+
+                  String date = log.schedule.toString();
+                  DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date);
+                  var inputDate = DateTime.parse(parseDate.toString());
+                  var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+                  var outputDate = outputFormat.format(inputDate);
+                  
+               
                   return Card(
                     color: const Color.fromARGB(255, 190, 228, 236),
                     elevation: 10,
@@ -86,27 +91,28 @@ class _LogsState extends State<Logs> {
                           )),
                       contentPadding: const EdgeInsets.fromLTRB(20, 5, 5, 5),
                       minLeadingWidth: 0,
-                      leading: Text(
-                        log.patientID.toString(),
+                      title: Text(
+                        log.id.toString(),
                         style: const TextStyle(
                             fontFamily: "OpenSans",
                             fontSize: 17,
                             color: Colors.black),
                       ),
-                      title: ListTile(
-                        title: Text(log.medicineName.toString()),
-                        subtitle: Text(log.schedule.toString()),
-                      ),
-                      subtitle: Text(log.status.toString()),
+                      subtitle: Text(outputDate.toString()),
                       onTap: () async {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (BuildContext context) => MedInfo(
-                        //       id: medicine['_id'],
-                        //       name: medicine['name'],
-                        //       quantity: medicine['quantity'],
-                        //       container: medicine['container'],
-                        //       user: widget.user),
-                        // ));
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => LogDetailsView(
+                              id: log.id.toString(),
+                              medicationId: log.medicationId.toString(),
+                              patientID: log.patientID.toString(),
+                              patientName: log.patientName.toString(),
+                              medicineId: log.medicineId.toString(),
+                              medicineName: log.medicineName.toString(),
+                              schedule: outputDate,
+                              status: log.status.toString(),
+                      
+                        )));
                       },
                     ),
                   );
@@ -116,7 +122,7 @@ class _LogsState extends State<Logs> {
               child: CircularProgressIndicator(),
             );
           }
-        },
+        }),
       ),
     );
   }

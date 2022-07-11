@@ -5,6 +5,7 @@ import 'package:patient/models/medication/medication.dart';
 import 'package:patient/models/medicine/medicineInfo.dart';
 import 'package:patient/models/patient/patient.dart';
 import 'package:patient/models/user.dart';
+import 'package:patient/theme/theme.dart';
 import 'package:patient/views/home.dart';
 import 'package:patient/views/patient/list.dart';
 import 'package:patient/views/patient/medication/add.dart';
@@ -109,7 +110,7 @@ class _ProfileState extends State<Profile> {
             );
           },
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.customGreen,
         centerTitle: true,
         title: const Text('Profile'),
         actions: [
